@@ -1,5 +1,6 @@
 package com.br.api.cartao.models;
 
+import com.br.api.cartao.enums.Categoria;
 import com.br.api.cartao.enums.TipoDeLancamento;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,19 +20,21 @@ public class Lancamento {
     private double valor;
     @DateTimeFormat
     private Date data;
+    @NotNull(message="Informar a categoria do lancamento")
+    private Categoria categoria;
     @ManyToOne
     private Cartao cartao;
 
     public Lancamento() {
     }
 
-    public Lancamento(int id, @NotNull(message = "Informar o tipo de lancamento")
-            TipoDeLancamento tipoDeLancamento, @DecimalMin("0.01") double valor,
-                      Date data, Cartao cartao) {
+    public Lancamento(int id, TipoDeLancamento tipoDeLancamento, double valor,
+                      Date data, Categoria categoria, Cartao cartao) {
         this.id = id;
         this.tipoDeLancamento = tipoDeLancamento;
         this.valor = valor;
         this.data = data;
+        this.categoria = categoria;
         this.cartao = cartao;
     }
 
@@ -65,6 +68,14 @@ public class Lancamento {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public Cartao getCartao() {
