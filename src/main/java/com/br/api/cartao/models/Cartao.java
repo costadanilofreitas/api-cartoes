@@ -3,10 +3,7 @@ package com.br.api.cartao.models;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -26,13 +23,14 @@ public class Cartao {
     @NotNull
     private double limiteAtual;
     @NotNull
+    @ManyToMany
     private int idCliente;
 
     public Cartao() {
     }
 
-    public Cartao(long numeroCartao, double limiteTotal, Date validade, int cvv, double limiteAtual, int idCliente) {
-        this.numeroCartao = numeroCartao;
+    public Cartao(double limiteTotal, Date validade, int cvv, double limiteAtual, int idCliente) {
+
         this.limiteTotal = limiteTotal;
         this.validade = validade;
         this.cvv = cvv;
