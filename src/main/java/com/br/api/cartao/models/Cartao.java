@@ -19,19 +19,29 @@ public class Cartao {
     @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
     private int cvv;
     private double limiteAtual;
-    @ManyToMany
-    private int idCliente;
+    @ManyToOne
+    private Cliente cliente;
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public Cartao() {
     }
 
-    public Cartao(double limiteTotal, Date validade, int cvv, double limiteAtual, int idCliente) {
-
+    public Cartao(long numeroCartao, double limiteTotal, Date validade,
+                  @Size(max = 3, message = "Cvv é obrigatorio informar três digitos") int cvv,
+                  double limiteAtual, Cliente cliente) {
+        this.numeroCartao = numeroCartao;
         this.limiteTotal = limiteTotal;
         this.validade = validade;
         this.cvv = cvv;
         this.limiteAtual = limiteAtual;
-        this.idCliente = idCliente;
+        this.cliente = cliente;
     }
 
     public long getNumeroCartao() {
@@ -74,11 +84,4 @@ public class Cartao {
         this.limiteAtual = limiteAtual;
     }
 
-    public int getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
-    }
 }

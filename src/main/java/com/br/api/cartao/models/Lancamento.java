@@ -19,8 +19,20 @@ public class Lancamento {
     private double valor;
     @DateTimeFormat
     private Date data;
+    @ManyToOne
+    private Cartao cartao;
 
     public Lancamento() {
+    }
+
+    public Lancamento(int id, @NotNull(message = "Informar o tipo de lancamento")
+            TipoDeLancamento tipoDeLancamento, @DecimalMin("0.01") double valor,
+                      Date data, Cartao cartao) {
+        this.id = id;
+        this.tipoDeLancamento = tipoDeLancamento;
+        this.valor = valor;
+        this.data = data;
+        this.cartao = cartao;
     }
 
     public int getId() {
@@ -53,5 +65,13 @@ public class Lancamento {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Cartao getCartao() {
+        return cartao;
+    }
+
+    public void setCartao(Cartao cartao) {
+        this.cartao = cartao;
     }
 }
