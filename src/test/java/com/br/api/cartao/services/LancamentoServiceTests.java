@@ -1,5 +1,6 @@
 package com.br.api.cartao.services;
 
+import com.br.api.cartao.enums.Categoria;
 import com.br.api.cartao.enums.TipoDeLancamento;
 import com.br.api.cartao.models.Cartao;
 import com.br.api.cartao.models.Cliente;
@@ -52,6 +53,7 @@ public class LancamentoServiceTests {
         lancamento.setData(calendar.getTime());
         lancamento.setTipoDeLancamento(TipoDeLancamento.CREDITO);
         lancamento.setValor(100);
+        lancamento.setCategoria(Categoria.BONUS);
         lancamento.setCartao(cartao);
     }
 

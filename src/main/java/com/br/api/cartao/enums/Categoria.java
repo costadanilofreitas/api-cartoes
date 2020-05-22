@@ -6,5 +6,6 @@ public enum Categoria {
     ALIMENTACAO,
     TRANSPORTE,
     SALARIO,
-    BONUS;
+    BONUS,
+    OUTROS;
 }
