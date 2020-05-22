@@ -13,16 +13,12 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long numeroCartao;
-    @NotNull
     private double limiteTotal;
     @DateTimeFormat
     private Date validade;
-    @NotNull
     @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
     private int cvv;
-    @NotNull
     private double limiteAtual;
-    @NotNull
     @ManyToMany
     private int idCliente;
 
