@@ -36,8 +36,8 @@ public class CartaoService {
         throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Código de Cliente Inexistente!");
     }
 
-    public Optional<Cartao> buscarPorId(int id){
-        Optional<Cartao> cartaoOptional = cartaoRepository.findById(Long(id));
+    public Optional<Cartao> buscarPorId(long id){
+        Optional<Cartao> cartaoOptional = cartaoRepository.findById(Integer.valueOf((int) id));
         return cartaoOptional;
     };
 
@@ -47,7 +47,7 @@ public class CartaoService {
     }
 
     public Cartao atualizarCartao(Cartao cartao) throws ObjectNotFoundException{
-        Optional<Cartao> cartaoOptional = buscarPorId(cartao.getId());
+        Optional<Cartao> cartaoOptional = buscarPorId(cartao.getNumeroCartao());
         if (cartaoOptional.isPresent()){
             Cartao cartaoData = cartaoOptional.get();
             if (cartao.getCvv() == 0){
