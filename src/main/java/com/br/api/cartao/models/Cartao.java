@@ -1,23 +1,32 @@
 package com.br.api.cartao.models;
 
-import javax.persistence.Entity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 public class Cartao {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long numeroCartao;
     private double limiteTotal;
+    @DateTimeFormat
     private Date validade;
+    @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
     private int cvv;
     private double limiteAtual;
+    @ManyToMany
     private int idCliente;
 
     public Cartao() {
     }
 
-    public Cartao(long numeroCartao, double limiteTotal, Date validade, int cvv, double limiteAtual, int idCliente) {
-        this.numeroCartao = numeroCartao;
+    public Cartao(double limiteTotal, Date validade, int cvv, double limiteAtual, int idCliente) {
+
         this.limiteTotal = limiteTotal;
         this.validade = validade;
         this.cvv = cvv;
