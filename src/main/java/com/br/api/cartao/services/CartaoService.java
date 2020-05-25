@@ -28,12 +28,12 @@ public class CartaoService {
 
 
     public Cartao salvarCartao(Cartao cartao){
-        Optional<Cliente> clienteOptional = clienteRepository.findById(cartao.getIdCliente());
-        if (clienteOptional.isPresent()){
+        //Optional<Cliente> clienteOptional = clienteRepository.findById();
+        //if (clienteOptional.isPresent()){
             Cartao cartaoObjeto = cartaoRepository.save(cartao);
             return cartaoObjeto;
-        }
-        throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Código de Cliente Inexistente!");
+        //}
+        //throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Código de Cliente Inexistente!");
     }
 
     public Optional<Cartao> buscarPorId(long id){
@@ -50,9 +50,6 @@ public class CartaoService {
         Optional<Cartao> cartaoOptional = buscarPorId(cartao.getNumeroCartao());
         if (cartaoOptional.isPresent()){
             Cartao cartaoData = cartaoOptional.get();
-            if (cartao.getCvv() == 0){
-                cartao.setCvv(cartaoData.getCvv());
-            }
             if (cartao.getLimiteAtual() == 0.0){
                 cartao.setLimiteAtual(cartaoData.getLimiteAtual());
             }
@@ -62,18 +59,18 @@ public class CartaoService {
             if (cartao.getLimiteTotal() == 0.0){
                 cartao.setLimiteTotal(cartaoData.getLimiteTotal());
             }
-            if (cartao.getIdCliente() == 0){
-                cartao.setIdCliente(cartaoData.getIdCliente());
-                Cartao cartaoObjeto = cartaoRepository.save(cartao);
-                return cartaoObjeto;
-            }else{
-                Optional<Cliente> clienteOptional = clienteRepository.findById(cartao.getIdCliente());
-                if (clienteOptional.isPresent()){
-                    Cartao cartaoObjeto = cartaoRepository.save(cartao);
-                    return cartaoObjeto;
-                }
-                throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Novo Código de Cliente Inexistente!");
-            }
+            //if (cartao.getIdCliente() == 0){
+            //    cartao.setIdCliente(cartaoData.getIdCliente());
+            Cartao cartaoObjeto = cartaoRepository.save(cartao);
+            return cartaoObjeto;
+            //}else{
+             //   Optional<Cliente> clienteOptional = clienteRepository.findById(cartao.getIdCliente());
+             //   if (clienteOptional.isPresent()){
+             //       Cartao cartaoObjeto = cartaoRepository.save(cartao);
+             //       return cartaoObjeto;
+             //}
+             //   throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Novo Código de Cliente Inexistente!");
+            //}
         }
         throw new org.hibernate.ObjectNotFoundException(Cartao.class, "O Cartão não foi encontrado");
     }
