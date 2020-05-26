@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -16,7 +18,8 @@ public class Cartao {
     private double limiteTotal;
     @DateTimeFormat
     private Date validade;
-  //  @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
+    @Min(100)
+    @Max(999)
     private int cvv;
     private double limiteAtual;
     @ManyToOne
