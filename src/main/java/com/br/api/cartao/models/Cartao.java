@@ -16,7 +16,7 @@ public class Cartao {
     private double limiteTotal;
     @DateTimeFormat
     private Date validade;
-    @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
+  //  @Size(max = 3, message = "Cvv é obrigatorio informar três digitos")
     private int cvv;
     private double limiteAtual;
     @ManyToOne
