@@ -15,13 +15,18 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long numeroCartao;
+
     private double limiteTotal;
-    @DateTimeFormat
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date validade;
+
     @Min(100)
     @Max(999)
     private int cvv;
+
     private double limiteAtual;
+
     @ManyToOne
     private Cliente cliente;
 
@@ -36,9 +41,7 @@ public class Cartao {
     public Cartao() {
     }
 
-    public Cartao(long numeroCartao, double limiteTotal, Date validade,
-                  @Size(max = 3, message = "Cvv é obrigatorio informar três digitos") int cvv,
-                  double limiteAtual, Cliente cliente) {
+    public Cartao(long numeroCartao, double limiteTotal, Date validade, int cvv, double limiteAtual, Cliente cliente) {
         this.numeroCartao = numeroCartao;
         this.limiteTotal = limiteTotal;
         this.validade = validade;
@@ -86,5 +89,4 @@ public class Cartao {
     public void setLimiteAtual(double limiteAtual) {
         this.limiteAtual = limiteAtual;
     }
-
 }

@@ -5,6 +5,7 @@ import com.br.api.cartao.enums.TipoDeLancamento;
 import com.br.api.cartao.models.Cartao;
 import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Lancamento;
+import com.br.api.cartao.services.CartaoService;
 import com.br.api.cartao.services.LancamentoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,12 +25,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 
+@WebMvcTest(LancamentoController.class)
 public class LancamentoControllerTests {
-    @MockBean
-    LancamentoService lancamentoService;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    LancamentoService lancamentoService;
+
+    @MockBean
+    CartaoService cartaoService;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -50,6 +57,7 @@ public class LancamentoControllerTests {
 
 
         cartao = new Cartao();
+        cartao.setNumeroCartao(1l);
         cartao.setCliente(cliente);
         cartao.setCvv(673);
         cartao.setLimiteAtual(0);
@@ -78,7 +86,7 @@ public class LancamentoControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.setId", CoreMatchers.equalTo(1)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
     }
 
     @Test
@@ -118,8 +126,8 @@ public class LancamentoControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.put("/lancamento/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.setId", CoreMatchers.equalTo(1)));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
     }
 
 
@@ -128,14 +136,16 @@ public class LancamentoControllerTests {
         lancamento.setId(1);
         Optional<Lancamento> lancamentoOptional = Optional.of(lancamento);
         Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(lancamentoOptional);
-        Mockito.verify(lancamentoService, Mockito.times(1))
-                .apagarLancamento(lancamentoOptional.get());
+
         String json = mapper.writeValueAsString(lancamentoOptional.get());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/cartao/3")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/lancamento/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Mockito.verify(lancamentoService, Mockito.times(1))
+                .apagarLancamento(lancamentoOptional.get());
 
     }
 
