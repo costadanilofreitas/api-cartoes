@@ -33,6 +33,14 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(Integer id, @NotBlank @Size(min = 8, max = 100, message = "Nome do cliente deve ter entre 8 a 100 caracteres") @NotNull String nome, @CPF(message = "CPF Inválido") String cpf, Date dataNascimento, @Email(message = "O formato do e-mail é inválido") String email) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.email = email;
+    }
+
     public int getId() {
         return id;
     }
