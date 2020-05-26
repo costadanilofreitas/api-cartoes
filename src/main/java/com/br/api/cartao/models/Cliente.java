@@ -23,7 +23,7 @@ public class Cliente {
     @Size(min=8, max=100, message = "Nome do cliente deve ter entre 8 a 100 caracteres")
     @NotNull
     private String nome;
-    @CPF
+    @CPF(message = "CPF Inválido")
     private String cpf;
     @DateTimeFormat
     private Date dataNascimento;
