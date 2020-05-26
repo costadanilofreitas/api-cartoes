@@ -37,7 +37,7 @@ public class CartaoService {
     }
 
     public Optional<Cartao> buscarPorId(long id){
-        Optional<Cartao> cartaoOptional = cartaoRepository.findById(Integer.valueOf((int) id));
+        Optional<Cartao> cartaoOptional = cartaoRepository.findById(id);
         return cartaoOptional;
     };
 

@@ -51,7 +51,7 @@ public class CartaoServiceTests {
 
     @Test
     public void testarBuscarPorIdSucesso(){
-        Mockito.when(cartaoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cartao));
+        Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cartao));
         int id = 1;
         Optional lancamentoOptional = cartaoService.buscarPorId(id);
         Assertions.assertEquals(cartao, lancamentoOptional.get());
@@ -59,7 +59,7 @@ public class CartaoServiceTests {
 
     @Test
     public void testarBuscarPorIdInexistente(){
-        Mockito.when(cartaoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         int id = 1;
         Optional lancamentoOptional = cartaoService.buscarPorId(id);
         Assertions.assertFalse(lancamentoOptional.isPresent());
@@ -90,7 +90,7 @@ public class CartaoServiceTests {
 
     @Test
     public void testarAtualizarCartaoSucesso() throws javassist.tools.rmi.ObjectNotFoundException {
-        Mockito.when(cartaoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cartao));
+        Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cartao));
         Mockito.when(cartaoRepository.save(Mockito.any(Cartao.class))).thenReturn(cartao);
         Cartao cartaoObjeto = cartaoService.atualizarCartao(cartao);
         Assertions.assertEquals(cartao, cartaoObjeto);
@@ -98,7 +98,7 @@ public class CartaoServiceTests {
 
     @Test
     public void testarAtualizarLancamentoInexistente(){
-        Mockito.when(cartaoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Mockito.when(cartaoRepository.save(Mockito.any(Cartao.class))).thenReturn(null);
         Assertions.assertThrows(ObjectNotFoundException.class, ()->{cartaoService.atualizarCartao(cartao);});
     }
