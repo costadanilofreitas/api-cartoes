@@ -63,6 +63,16 @@ public class LancamentoServiceTests {
         int id = 1;
         Optional lancamentoOptional = lancamentoService.buscarPorId(id);
         Assertions.assertEquals(lancamento, lancamentoOptional.get());
+        Assertions.assertEquals(lancamento.getTipoDeLancamento(),
+                ((Lancamento) lancamentoOptional.get()).getTipoDeLancamento());
+        Assertions.assertEquals(lancamento.getData(),
+                ((Lancamento) lancamentoOptional.get()).getData());
+        Assertions.assertEquals(lancamento.getValor(),
+                ((Lancamento) lancamentoOptional.get()).getValor());
+        Assertions.assertEquals(lancamento.getCategoria(),
+                ((Lancamento) lancamentoOptional.get()).getCategoria());
+        Assertions.assertEquals(lancamento.getCartao(),
+                ((Lancamento) lancamentoOptional.get()).getCartao());
     }
 
     @Test
@@ -78,6 +88,15 @@ public class LancamentoServiceTests {
         Mockito.when(lancamentoRepository.save(Mockito.any(Lancamento.class))).thenReturn(lancamento);
         Lancamento lancamentoObjeto = lancamentoService.criarLancamento(lancamento);
         Assertions.assertEquals(lancamento, lancamentoObjeto);
+    }
+
+    @Test
+    public void testarCriarLancamentoZero(){
+        Lancamento lancamentoSave = new Lancamento(1, TipoDeLancamento.CREDITO, 0.01
+                , Calendar.getInstance().getTime(), Categoria.LAZER, cartao);
+        Mockito.when(lancamentoRepository.save(Mockito.any(Lancamento.class))).thenReturn(lancamentoSave);
+        Lancamento lancamentoObjeto = lancamentoService.criarLancamento(lancamentoSave);
+        Assertions.assertEquals(lancamentoSave, lancamentoObjeto);
     }
 
     @Test
