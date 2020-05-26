@@ -30,8 +30,8 @@ public class CartaoService {
     public Cartao salvarCartao(Cartao cartao){
         //Optional<Cliente> clienteOptional = clienteRepository.findById();
         //if (clienteOptional.isPresent()){
-            Cartao cartaoObjeto = cartaoRepository.save(cartao);
-            return cartaoObjeto;
+        Cartao cartaoObjeto = cartaoRepository.save(cartao);
+        return cartaoObjeto;
         //}
         //throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Código de Cliente Inexistente!");
     }
@@ -64,12 +64,12 @@ public class CartaoService {
             Cartao cartaoObjeto = cartaoRepository.save(cartao);
             return cartaoObjeto;
             //}else{
-             //   Optional<Cliente> clienteOptional = clienteRepository.findById(cartao.getIdCliente());
-             //   if (clienteOptional.isPresent()){
-             //       Cartao cartaoObjeto = cartaoRepository.save(cartao);
-             //       return cartaoObjeto;
-             //}
-             //   throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Novo Código de Cliente Inexistente!");
+            //   Optional<Cliente> clienteOptional = clienteRepository.findById(cartao.getIdCliente());
+            //   if (clienteOptional.isPresent()){
+            //       Cartao cartaoObjeto = cartaoRepository.save(cartao);
+            //       return cartaoObjeto;
+            //}
+            //   throw new org.hibernate.ObjectNotFoundException(Cartao.class, "Novo Código de Cliente Inexistente!");
             //}
         }
         throw new org.hibernate.ObjectNotFoundException(Cartao.class, "O Cartão não foi encontrado");
