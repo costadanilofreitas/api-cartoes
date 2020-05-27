@@ -89,12 +89,27 @@ URL : http://18.228.2.146/cartoes/1
 URL  :http://18.228.2.146/lancamentos
 POST - Inclui lancamento
 {
-  "tipoDeLancamento":"CREDITO",
-  "valor":100.0,
-  "data":"2020-05-01",
-  "cartao":1,
-  "categoria":"ALIMENTACAO"
+"tipoDeLancamento":"CREDITO",
+"valor": 1000,
+"data": "2020-01-01",
+"categoria": "LAZER",
+"cartao":
+{
+"numeroCartao": 2,
+"limiteTotal": 10000.0,
+"validade": "2020-11-29T00:00:00.000+0000",
+"cvv": 222,
+"limiteAtual": 20200.0,
+"cliente": {
+"id": 1,
+"nome": "João Aparecido",
+"cpf": "470.129.120-06",
+"dataNascimento": "1991-11-25T02:00:00.000+0000",
+"email": "joao@email.com.br"
 }
+
+}
+} 
 URL  :http://18.228.2.146/lancamentos
 GET - Consulta Todos Lancamentos
 
