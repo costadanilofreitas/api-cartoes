@@ -30,9 +30,42 @@ CREATE DATABASE api_cartoes;
 GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
 
 ====================================================
-Dados de link AWS das API CARTOES
+Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
+
+URL : http://18.228.2.146/usuario/registrar
+POST 
+{
+"nome":"Edson Arantes",
+"senha":"mastersoccer20",
+"email":"pele@futebol.com.br"
+}
+
+URL : http://18.228.2.146/login
+POST
+{
+"email":"pele@futebol.com.br"",
+"senha": "mastersoccer20"
+} 
+
+OBS: Copiar Token Authorization (Gerado  aba Header)
+     Informar token nas API Abaixo Authorization  (sem a palavra Bearer)
+
 
 URL : http://18.228.2.146/clientes
+POST - INCLUSAO
+ {
+        "nome": "João Aparecido",
+        "cpf": "470.129.120-06",
+        "dataNascimento": "1991-11-25T02:00:00.000+0000",
+        "email": "joao@email.com.br"
+    },
+URL : http://18.228.2.146/clientes/
+GET - Pesquisa Todos Clientes
+
+URL : http://18.228.2.146/clientes/1
+GET - Pesquisa Cliente Especifico 1
+PUT - Atualiza Cliente 1
+DELETE - Exclui Cliente 1
 
 URL http://18.228.2.146/cartoes
     POST - Inclusão de Cartão
@@ -53,4 +86,21 @@ URL : http://18.228.2.146/cartoes/1
 
      DELETE - Exclui o Cartão número 1
 
-http://18.228.2.146/lancamentos
+URL  :http://18.228.2.146/lancamentos
+POST - Inclui lancamento
+{
+  "tipoDeLancamento":"CREDITO",
+  "valor":100.0,
+  "data":"2020-05-01",
+  "cartao":1,
+  "categoria":"ALIMENTACAO"
+}
+URL  :http://18.228.2.146/lancamentos
+GET - Consulta Todos Lancamentos
+
+URL  :http://18.228.2.146/lancamentos/1
+GET - Consulta Lancamento 1
+PUT - Atualiza Lancamento 1
+DELETE - Exclui Lancamento 1
+
+
