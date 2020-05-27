@@ -93,7 +93,7 @@ POST - Inclui lancamento
   "valor":100.0,
   "data":"2020-05-01",
   "cartao":1,
-  "categoria":"ALMIMENTACAO"
+  "categoria":"ALIMENTACAO"
 }
 URL  :http://18.228.2.146/lancamentos
 GET - Consulta Todos Lancamentos
