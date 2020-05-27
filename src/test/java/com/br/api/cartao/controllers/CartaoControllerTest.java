@@ -18,10 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Optional;
+import java.util.*;
 
 @WebMvcTest(CartaoController.class)
 public class CartaoControllerTest {
@@ -47,7 +44,7 @@ public class CartaoControllerTest {
 
         cliente = new Cliente();
         cliente.setId(1);
-        cliente.setCpf("12345678909");
+        cliente.setCpf("470.129.120-06");
         cliente.setDataNascimento(calendar.getTime());
         cliente.setEmail("teste@teste.com");
         cliente.setNome("SALVADOR DALI");
@@ -58,12 +55,20 @@ public class CartaoControllerTest {
         cartao.setLimiteAtual(1000);
         cartao.setLimiteTotal(1000);
 
+        Calendar validade = new GregorianCalendar();
+        validade = new GregorianCalendar(2030, Calendar.JANUARY, 2);
+
+        cartao.setValidade(validade.getTime());
+
     }
 
     @Test
     public void salvarCartaoTest() throws Exception {
 
         cartao.setNumeroCartao(00000001);
+        Iterable<Cliente> clienteIterable = Arrays.asList(cliente);
+
+        Mockito.when(cartaoService.buscarTodosClientes(Mockito.anyList())).thenReturn(clienteIterable);
         Mockito.when(cartaoService.salvarCartao(Mockito.any(Cartao.class))).thenReturn(cartao);
 
         String json = objectMapper.writeValueAsString(cartao);
@@ -114,7 +119,7 @@ public class CartaoControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/cartao/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.numeroCartao", CoreMatchers.equalTo(1)));
 
     }
