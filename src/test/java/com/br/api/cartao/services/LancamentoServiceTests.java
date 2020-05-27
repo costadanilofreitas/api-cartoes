@@ -79,8 +79,7 @@ public class LancamentoServiceTests {
     public void testarBuscarPorIdInexistente(){
         Mockito.when(lancamentoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
         int id = 1;
-        Optional lancamentoOptional = lancamentoService.buscarPorId(id);
-        Assertions.assertFalse(lancamentoOptional.isPresent());
+        Assertions.assertThrows(ObjectNotFoundException.class,() ->{lancamentoService.buscarPorId(id);});
     }
 
     @Test

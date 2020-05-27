@@ -20,7 +20,10 @@ public class ClienteService {
 
     public Optional<Cliente> buscarPorId (int id) {
         Optional<Cliente> clienteOptional = clienteRepository.findById(id);
-        return clienteOptional;
+        if(clienteOptional.isPresent()){
+            return clienteOptional;
+        }
+        throw new ObjectNotFoundException(Cliente.class, "O cliente não foi encontrado");
     }
 
     public Iterable<Cliente> buscarTodosClientes() {
