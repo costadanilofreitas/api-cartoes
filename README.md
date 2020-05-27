@@ -34,7 +34,7 @@ GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
 ```
 
 ### Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
-IP AWS:18.228.2.146
+IP AWS : 18.228.2.146
 
 #### Exemplo de autenticação para ter acesso as rotas privadas
 ```
