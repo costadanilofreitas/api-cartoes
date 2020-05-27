@@ -19,7 +19,7 @@ Depois da instalação do MariaDB, é necessario subir o banco de dados, criar a
 Para isso basta executar o comandos abaixo respectivamente:
 
 ```
-====================================================
+==========================================================================
 sudo systemctl start mariadb.service
 
 mysql -u root
@@ -30,7 +30,7 @@ CREATE DATABASE api_cartoes;
 
 GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
 
-====================================================
+==========================================================================
 ```
 
 ### Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
