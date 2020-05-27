@@ -33,9 +33,9 @@ GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
 ====================================================
 ```
 
-### Execução MariaDB
-Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
+### Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
 
+```
 URL : http://18.228.2.146/usuario/registrar
 POST 
 {
@@ -50,10 +50,10 @@ POST
 "email":"pele@futebol.com.br"",
 "senha": "mastersoccer20"
 } 
-
+```
 OBS: Copiar Token Authorization (Gerado  aba Header)
      Informar token nas API Abaixo Authorization  (sem a palavra Bearer)
-
+```
 
 URL : http://18.228.2.146/clientes
 POST - INCLUSAO
@@ -121,5 +121,6 @@ URL  :http://18.228.2.146/lancamentos/1
 GET - Consulta Lancamento 1
 PUT - Atualiza Lancamento 1
 DELETE - Exclui Lancamento 1
+```
 
 
