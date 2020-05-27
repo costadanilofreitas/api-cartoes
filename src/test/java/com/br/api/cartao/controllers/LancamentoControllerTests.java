@@ -8,7 +8,9 @@ import com.br.api.cartao.models.Lancamento;
 import com.br.api.cartao.services.CartaoService;
 import com.br.api.cartao.services.LancamentoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.runtime.regexp.joni.Option;
 import org.hamcrest.CoreMatchers;
+import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -82,12 +84,26 @@ public class LancamentoControllerTests {
 
         String json = mapper.writeValueAsString(lancamento);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/lancamento")
+        mockMvc.perform(MockMvcRequestBuilders.post("/lancamentos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
     }
+
+    @Test
+    public void testeSalvarLancamentoInvalido() throws Exception{
+        lancamento.setId(1);
+        lancamento.setValor(0);
+        Mockito.when(lancamentoService.criarLancamento(Mockito.any(Lancamento.class)))
+                .thenReturn(null);
+
+        String json = mapper.writeValueAsString(lancamento);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/lancamentos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());  }
 
     @Test
     public void testeBuscarTodosLancamentos() throws Exception{
@@ -96,7 +112,7 @@ public class LancamentoControllerTests {
 
         String json = mapper.writeValueAsString(lancamentoIterable);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/lancamento")
+        mockMvc.perform(MockMvcRequestBuilders.get("/lancamentos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -109,10 +125,23 @@ public class LancamentoControllerTests {
 
         String json = mapper.writeValueAsString(lancamentoOptional);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/lancamento/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testarBuscarLancamentoInexistentePorID() throws Exception{
+        Optional<Lancamento> lancamentoOptional = Optional.of(lancamento);
+        Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        String json = mapper.writeValueAsString(lancamentoOptional);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/lancamentos/3")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -123,13 +152,26 @@ public class LancamentoControllerTests {
 
         String json = mapper.writeValueAsString(lancamento);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/lancamento/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
     }
 
+    @Test
+    public void testeAtualizarLancamentoInexistente() throws Exception{
+
+        //Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(lancamentoService.atualizarLancamento(Mockito.any(Lancamento.class)))
+                .thenThrow(new ObjectNotFoundException(Lancamento.class
+                                ,"Não foi encontrado o lançamento selecionado"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/lancamentos/3")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(""))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
     @Test
     public void testeExcluirLancamento() throws Exception{
@@ -139,7 +181,7 @@ public class LancamentoControllerTests {
 
         String json = mapper.writeValueAsString(lancamentoOptional.get());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/lancamento/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -149,5 +191,17 @@ public class LancamentoControllerTests {
 
     }
 
+    @Test
+    public void testeExcluirLancamentoInexistente() throws Exception{
+        lancamento.setId(1);
+        Optional<Lancamento> lancamentoOptional = Optional.of(lancamento);
+        Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(Optional.empty());
 
+        String json = mapper.writeValueAsString(lancamentoOptional.get());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/lancamentos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 }

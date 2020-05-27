@@ -7,6 +7,7 @@ import com.br.api.cartao.services.CartaoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.hamcrest.CoreMatchers;
+import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -73,11 +74,28 @@ public class CartaoControllerTest {
 
         String json = objectMapper.writeValueAsString(cartao);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/cartao")
+        mockMvc.perform(MockMvcRequestBuilders.post("/cartoes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.numeroCartao", CoreMatchers.equalTo(1)));
+    }
+
+    @Test
+    public void salvarCartaoInvalidoTest() throws Exception {
+
+        cartao.setNumeroCartao(1);
+        Iterable<Cliente> clienteIterable = Arrays.asList(cliente);
+
+        Mockito.when(cartaoService.buscarTodosClientes(Mockito.anyList())).thenReturn(new ArrayList<>());
+        Mockito.when(cartaoService.salvarCartao(Mockito.any(Cartao.class))).thenReturn(cartao);
+
+        String json = objectMapper.writeValueAsString(cartao);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/cartoes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -87,7 +105,7 @@ public class CartaoControllerTest {
 
         String json = objectMapper.writeValueAsString(cartaoIterable);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/cartao")
+        mockMvc.perform(MockMvcRequestBuilders.get("/cartoes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -101,10 +119,24 @@ public class CartaoControllerTest {
 
         String json = objectMapper.writeValueAsString(cartaoOptional);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/cartao/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    public void buscarCartaoIDInexistenteTest() throws Exception {
+        Optional<Cartao> cartaoOptional = Optional.of(cartao);
+        Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        String json = objectMapper.writeValueAsString(cartaoOptional);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/cartoes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
     }
 
@@ -116,7 +148,7 @@ public class CartaoControllerTest {
 
         String json = objectMapper.writeValueAsString(cartao);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/cartao/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -128,33 +160,81 @@ public class CartaoControllerTest {
     public void atualizarCartaoTestErro() throws Exception {
 
         Cartao cartao2 = new Cartao();
-        //   Mockito.when(cartaoService.atualizarCartao(Mockito.any(Cartao.class))).thenReturn(cartao2);
+        Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(Optional.empty());
+        Mockito.when(cartaoService.atualizarCartao(Mockito.any(Cartao.class)))
+                .thenThrow(new ObjectNotFoundException(Cartao.class,
+                        "O Cartão não foi encontrado"));
 
         String json = objectMapper.writeValueAsString(cartao2);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/cartao/a")
+        mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
-        //     .andExpect(MockMvcResultMatchers.jsonPath("$.numeroCartao", CoreMatchers.equalTo(4)));
 
     }
 
+    @Test
+    public void atualizarCartaoTestUrlErro() throws Exception {
 
-    /*@Test
+        Cartao cartao2 = new Cartao();
+        Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(Optional.empty());
+        Mockito.when(cartaoService.atualizarCartao(Mockito.any(Cartao.class)))
+                .thenThrow(new ObjectNotFoundException(Cartao.class,
+                        "O Cartão não foi encontrado"));
+
+        String json = objectMapper.writeValueAsString(cartao2);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/a")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
+
+    @Test
+    public void atualizarCartaoTestVazioErro() throws Exception {
+
+        Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(Optional.empty());
+        Mockito.when(cartaoService.atualizarCartao(Mockito.any(Cartao.class)))
+                .thenThrow(new ObjectNotFoundException(Cartao.class,
+                        "O Cartão não foi encontrado"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(""))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
+
+    @Test
     public void excluirCartaoTest() throws Exception {
         cartao.setNumeroCartao(3);
         Optional<Cartao> cartaoOptional = Optional.of(cartao);
         Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(cartaoOptional);
-        Mockito.verify(cartaoService, Mockito.times(1))
-                .deletarCartao(cartaoOptional.get());
+
         String json = objectMapper.writeValueAsString(cartaoOptional.get());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/cartao/3")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cartoes/3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(cartaoService, Mockito.times(1))
+                .deletarCartao(cartaoOptional.get());
+    }
 
-    }*/
+    @Test
+    public void excluirCartaoInvalidoTest() throws Exception {
+        cartao.setNumeroCartao(3);
+        Optional<Cartao> cartaoOptional = Optional.of(cartao);
+        Mockito.when(cartaoService.buscarPorId(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        String json = objectMapper.writeValueAsString(cartaoOptional.get());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cartoes/3")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 
 }

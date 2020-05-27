@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/lancamento")
+@RequestMapping("/lancamentos")
 public class LancamentoController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class LancamentoController {
         if (lancamentoOptional.isPresent()){
             return lancamentoOptional.get();
         }else {
-            throw new ResponseStatusException((HttpStatus.NO_CONTENT));
+            throw new ResponseStatusException((HttpStatus.BAD_REQUEST));
         }
     }
 
