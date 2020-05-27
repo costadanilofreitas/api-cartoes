@@ -28,4 +28,29 @@ CREATE USER 'ac'@'localhost' IDENTIFIED BY '123';
 CREATE DATABASE api_cartoes;
 
 GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
-```
+
+====================================================
+Dados de link AWS das API CARTOES
+
+URL : http://18.228.2.146/clientes
+
+URL http://18.228.2.146/cartoes
+    POST - Inclusão de Cartão
+    Exemplo : Json
+    {	"limiteTotal":10000,
+	"validade":"2020-11-29",
+	"cvv":222,
+	"limiteAtual":200,
+	"cliente":{"id":1}
+    }
+GET - Consulta Todos os Cartões
+URL : http://18.228.2.146/cartoes/1
+      GET - Consulta o Cartão número 1
+
+      PUT - Atualiza o Cartão número 1
+      Exemplo : Json 
+     { "validade":"2027-05-01"}
+
+     DELETE - Exclui o Cartão número 1
+
+http://18.228.2.146/lancamentos
