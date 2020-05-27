@@ -34,7 +34,9 @@ GRANT ALL ON api_cartoes.* to 'ac'@'%' identified by '123';
 ```
 
 ### Dados de link AWS das API CARTOES - utilizando POSTMAN para validar chamadas
+IP AWS:18.228.2.146
 
+#### Exemplo de autenticação para ter acesso as rotas privadas
 ```
 URL : http://18.228.2.146/usuario/registrar
 POST 
@@ -51,8 +53,11 @@ POST
 "senha": "mastersoccer20"
 } 
 ```
+
 OBS: Copiar Token Authorization (Gerado  aba Header)
      Informar token nas API Abaixo Authorization  (sem a palavra Bearer)
+     Obs: As rotas do tipo GET não precisam de autenticação
+     
 ```
 
 URL : http://18.228.2.146/clientes
