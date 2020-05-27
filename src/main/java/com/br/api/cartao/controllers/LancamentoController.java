@@ -1,6 +1,7 @@
 package com.br.api.cartao.controllers;
 
 
+import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Lancamento;
 import com.br.api.cartao.services.CartaoService;
 import com.br.api.cartao.services.LancamentoService;
@@ -30,12 +31,12 @@ public class LancamentoController {
     }
 
     @GetMapping("/{id}")
-    public Lancamento buscarPorId(@PathVariable Integer id){
-        Optional<Lancamento> lancamentoOptional = lancamentoService.buscarPorId(id);
-        if (lancamentoOptional.isPresent()){
-            return lancamentoOptional.get();
-        }else {
-            throw new ResponseStatusException((HttpStatus.BAD_REQUEST));
+    public ResponseEntity<Lancamento> buscarPorId(@PathVariable Integer id){
+        try {
+            Optional<Lancamento> lancamentoOptional = lancamentoService.buscarPorId(id);
+            return ResponseEntity.status(200).body(lancamentoOptional.get());
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
 

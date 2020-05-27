@@ -20,7 +20,7 @@ public class LancamentoService {
         if(lancamentoOptional.isPresent()){
             return lancamentoOptional;
         }
-        throw new ObjectNotFoundException(Cliente.class, "O lancamento não foi encontrado!");
+        throw new ObjectNotFoundException(Lancamento.class, "O lancamento não foi encontrado!");
     }
 
     public Lancamento criarLancamento(Lancamento lancamento){
