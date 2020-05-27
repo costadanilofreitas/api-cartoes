@@ -1,7 +1,11 @@
 package com.br.api.cartao.controllers;
 
 import com.br.api.cartao.models.Cliente;
+import com.br.api.cartao.models.Usuario;
+import com.br.api.cartao.security.DetalhesUsuario;
+import com.br.api.cartao.security.JWTUtil;
 import com.br.api.cartao.services.ClienteService;
+import com.br.api.cartao.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
@@ -35,8 +39,22 @@ public class ClienteControllerTest {
 
     Cliente cliente;
 
+    @MockBean
+    private UsuarioService usuarioService;
+
+    @MockBean
+    private JWTUtil jwtUtil;
+
+
     @BeforeEach
     public void iniciar() throws ParseException {
+        Usuario usuario = new Usuario(1, "Joao", "joao@joao", "123");
+        DetalhesUsuario detalhesUsuario = new DetalhesUsuario(usuario.getId(), usuario.getEmail(), usuario.getSenha());
+        Mockito.when(usuarioService.loadUserByUsername(Mockito.anyString())).thenReturn(detalhesUsuario);
+        Mockito.when(jwtUtil.getUsername(Mockito.anyString())).thenReturn("joao@joao");
+        Mockito.when(jwtUtil.tokenValido(Mockito.anyString())).thenReturn(true);
+
+
         Calendar calendar = new GregorianCalendar();
         calendar = new GregorianCalendar(1991, Calendar.OCTOBER + 1, 25);
 
@@ -51,6 +69,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nome", CoreMatchers.equalTo("João Aparecido")))
@@ -65,6 +84,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -78,6 +98,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -91,6 +112,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -101,6 +123,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(""))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -113,6 +136,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -122,6 +146,7 @@ public class ClienteControllerTest {
     public void deveDarBadRequestCasoPasseUmJsonVazio() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(""))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -197,6 +222,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/clientes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nome", CoreMatchers.equalTo("João Aparecido")))
@@ -212,6 +238,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/clientes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
@@ -224,6 +251,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/clientes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nome", CoreMatchers.equalTo("João Aparecido")))
@@ -237,6 +265,7 @@ public class ClienteControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/clientes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }

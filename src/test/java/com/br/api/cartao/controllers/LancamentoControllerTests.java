@@ -5,8 +5,12 @@ import com.br.api.cartao.enums.TipoDeLancamento;
 import com.br.api.cartao.models.Cartao;
 import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Lancamento;
+import com.br.api.cartao.models.Usuario;
+import com.br.api.cartao.security.DetalhesUsuario;
+import com.br.api.cartao.security.JWTUtil;
 import com.br.api.cartao.services.CartaoService;
 import com.br.api.cartao.services.LancamentoService;
+import com.br.api.cartao.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.runtime.regexp.joni.Option;
 import org.hamcrest.CoreMatchers;
@@ -45,8 +49,20 @@ public class LancamentoControllerTests {
     Cartao cartao;
     Cliente cliente;
 
+    @MockBean
+    private UsuarioService usuarioService;
+
+    @MockBean
+    private JWTUtil jwtUtil;
+
     @BeforeEach
     public void iniciar(){
+        Usuario usuario = new Usuario(1, "Joao", "joao@joao", "123");
+        DetalhesUsuario detalhesUsuario = new DetalhesUsuario(usuario.getId(), usuario.getEmail(), usuario.getSenha());
+        Mockito.when(usuarioService.loadUserByUsername(Mockito.anyString())).thenReturn(detalhesUsuario);
+        Mockito.when(jwtUtil.getUsername(Mockito.anyString())).thenReturn("joao@joao");
+        Mockito.when(jwtUtil.tokenValido(Mockito.anyString())).thenReturn(true);
+
         Calendar calendar = new GregorianCalendar();
         calendar = new GregorianCalendar(2020, Calendar.APRIL, 12);
 
@@ -86,6 +102,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lancamentos")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
@@ -102,6 +119,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lancamentos")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());  }
 
@@ -154,6 +172,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
@@ -169,6 +188,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/lancamentos/3")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(""))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -183,6 +203,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
@@ -201,6 +222,7 @@ public class LancamentoControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/lancamentos/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
