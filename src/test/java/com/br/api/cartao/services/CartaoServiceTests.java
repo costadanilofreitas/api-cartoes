@@ -4,6 +4,7 @@ import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Cartao;
 
 import com.br.api.cartao.repositories.CartaoRepository;
+import com.br.api.cartao.repositories.ClienteRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +19,15 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @SpringBootTest
 public class CartaoServiceTests {
     @MockBean
     CartaoRepository cartaoRepository;
+
+    @MockBean
+    ClienteRepository clienteRepository;
 
     @Autowired
     CartaoService cartaoService;
@@ -67,7 +73,7 @@ public class CartaoServiceTests {
 
     @Test
     public void testarSalvarCartaoSucesso(){
-        Mockito.when(cartaoRepository.save(Mockito.any(Cartao.class))).thenReturn(cartao);
+        Mockito.when(cartaoRepository.save(any(Cartao.class))).thenReturn(cartao);
         Cartao cartaoObjeto = cartaoService.salvarCartao(cartao);
         Assertions.assertEquals(cartao, cartaoObjeto);
     }
@@ -81,6 +87,14 @@ public class CartaoServiceTests {
     }
 
     @Test
+    public void testarBuscarTodosClientesSucesso(){
+        Iterable<Cliente> clientesIterable = Arrays.asList(cliente);
+        Mockito.when(clienteRepository.findAllById(any())).thenReturn(Arrays.asList(cliente));
+        Iterable<Cliente> iterableResultado = cartaoService.buscarTodosClientes(Arrays.asList(cliente.getId()));
+        Assertions.assertEquals(clientesIterable, iterableResultado);
+    }
+
+    @Test
     public void testarBuscarTodosLancamentosVazio(){
         Iterable<Cartao> cartaoIterable = Arrays.asList(new Cartao());
         Mockito.when(cartaoRepository.findAll()).thenReturn(cartaoIterable);
@@ -89,9 +103,9 @@ public class CartaoServiceTests {
     }
 
     @Test
-    public void testarAtualizarCartaoSucesso() throws javassist.tools.rmi.ObjectNotFoundException {
+    public void testarAtualizarCartaoSucesso() throws Exception {
         Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cartao));
-        Mockito.when(cartaoRepository.save(Mockito.any(Cartao.class))).thenReturn(cartao);
+        Mockito.when(cartaoRepository.save(any(Cartao.class))).thenReturn(cartao);
         Cartao cartaoObjeto = cartaoService.atualizarCartao(cartao);
         Assertions.assertEquals(cartao, cartaoObjeto);
     }
@@ -99,16 +113,24 @@ public class CartaoServiceTests {
     @Test
     public void testarAtualizarLancamentoInexistente(){
         Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-        Mockito.when(cartaoRepository.save(Mockito.any(Cartao.class))).thenReturn(null);
+        Mockito.when(cartaoRepository.save(any(Cartao.class))).thenReturn(null);
         Assertions.assertThrows(ObjectNotFoundException.class, ()->{cartaoService.atualizarCartao(cartao);});
     }
 
+    @Test
+    public void testarAtualizarLancamentoLimiteVazio() throws Exception{
+        cartao.setLimiteTotal(0);
+        Mockito.when(cartaoRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(cartao));
+        Mockito.when(cartaoRepository.save(any(Cartao.class))).thenReturn(cartao);
+        Cartao cartaoObjeto = cartaoService.atualizarCartao(cartao);
+        Assertions.assertEquals(cartao, cartaoObjeto);
+    }
 
     @Test
     public void testarDeletarCartaoSucesso(){
         cartaoService.deletarCartao(cartao);
         Mockito.verify(cartaoRepository, Mockito.times(1))
-                .delete(Mockito.any(Cartao.class));
+                .delete(any(Cartao.class));
     }
 
 }
