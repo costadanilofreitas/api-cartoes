@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("cartoes")
+@RequestMapping("/cartoes")
 public class CartaoController {
     @Autowired
     private CartaoService cartaoService;

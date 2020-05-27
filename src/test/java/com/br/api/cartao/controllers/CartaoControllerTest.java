@@ -2,8 +2,12 @@ package com.br.api.cartao.controllers;
 
 import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Cartao;
+import com.br.api.cartao.models.Usuario;
 import com.br.api.cartao.repositories.CartaoRepository;
+import com.br.api.cartao.security.DetalhesUsuario;
+import com.br.api.cartao.security.JWTUtil;
 import com.br.api.cartao.services.CartaoService;
+import com.br.api.cartao.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.hamcrest.CoreMatchers;
@@ -33,12 +37,23 @@ public class CartaoControllerTest {
     @MockBean
     CartaoService cartaoService;
 
+    @MockBean
+    private UsuarioService usuarioService;
+
+    @MockBean
+    private JWTUtil jwtUtil;
+
     Cartao cartao;
     Cliente cliente;
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void Inicialize() {
+        Usuario usuario = new Usuario(1, "Joao", "joao@joao", "123");
+        DetalhesUsuario detalhesUsuario = new DetalhesUsuario(usuario.getId(), usuario.getEmail(), usuario.getSenha());
+        Mockito.when(usuarioService.loadUserByUsername(Mockito.anyString())).thenReturn(detalhesUsuario);
+        Mockito.when(jwtUtil.getUsername(Mockito.anyString())).thenReturn("joao@joao");
+        Mockito.when(jwtUtil.tokenValido(Mockito.anyString())).thenReturn(true);
 
         Calendar calendar = new GregorianCalendar();
         calendar = new GregorianCalendar(1971, Calendar.MAY, 25);
@@ -76,6 +91,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/cartoes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.numeroCartao", CoreMatchers.equalTo(1)));
@@ -94,6 +110,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/cartoes")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -150,6 +167,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.numeroCartao", CoreMatchers.equalTo(1)));
@@ -169,6 +187,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -187,6 +206,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/a")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -202,6 +222,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/cartoes/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(""))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
@@ -217,6 +238,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/cartoes/3")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(cartaoService, Mockito.times(1))
@@ -233,6 +255,7 @@ public class CartaoControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/cartoes/3")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "DevePassar")
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
