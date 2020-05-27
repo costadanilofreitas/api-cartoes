@@ -93,7 +93,7 @@ public class LancamentoControllerTests {
     }
 
     @Test
-    public void testeSalvarLancamento() throws Exception{
+    public void testarSalvarLancamento() throws Exception{
 
         lancamento.setId(1);
         Mockito.when(lancamentoService.criarLancamento(Mockito.any(Lancamento.class))).thenReturn(lancamento);
@@ -113,7 +113,7 @@ public class LancamentoControllerTests {
         lancamento.setId(1);
         lancamento.setValor(0);
         Mockito.when(lancamentoService.criarLancamento(Mockito.any(Lancamento.class)))
-                .thenReturn(null);
+                .thenReturn(lancamento);
 
         String json = mapper.writeValueAsString(lancamento);
 
@@ -124,7 +124,7 @@ public class LancamentoControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());  }
 
     @Test
-    public void testeBuscarTodosLancamentos() throws Exception{
+    public void testarBuscarTodosLancamentos() throws Exception{
         Iterable<Lancamento> lancamentoIterable = Arrays.asList(lancamento, lancamento);
         Mockito.when(lancamentoService.buscarTodosLancamentos()).thenReturn(lancamentoIterable);
 
@@ -163,7 +163,7 @@ public class LancamentoControllerTests {
     }
 
     @Test
-    public void testeAtualizarLancamento() throws Exception{
+    public void testarAtualizarLancamento() throws Exception{
 
         lancamento.setId(1);
         Mockito.when(lancamentoService.atualizarLancamento(Mockito.any(Lancamento.class))).thenReturn(lancamento);
@@ -179,7 +179,7 @@ public class LancamentoControllerTests {
     }
 
     @Test
-    public void testeAtualizarLancamentoInexistente() throws Exception{
+    public void testarAtualizarLancamentoInexistente() throws Exception{
 
         //Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(Optional.empty());
         Mockito.when(lancamentoService.atualizarLancamento(Mockito.any(Lancamento.class)))
@@ -194,7 +194,7 @@ public class LancamentoControllerTests {
     }
 
     @Test
-    public void testeExcluirLancamento() throws Exception{
+    public void testarExcluirLancamento() throws Exception{
         lancamento.setId(1);
         Optional<Lancamento> lancamentoOptional = Optional.of(lancamento);
         Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(lancamentoOptional);
@@ -213,7 +213,7 @@ public class LancamentoControllerTests {
     }
 
     @Test
-    public void testeExcluirLancamentoInexistente() throws Exception{
+    public void testarExcluirLancamentoInexistente() throws Exception{
         lancamento.setId(1);
         Optional<Lancamento> lancamentoOptional = Optional.of(lancamento);
         Mockito.when(lancamentoService.buscarPorId(Mockito.anyInt())).thenReturn(Optional.empty());
