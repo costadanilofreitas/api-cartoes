@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "07e198d1-e0da-4791-b38a-774977112cc0",
+		"name": "API-Cartao-Cartoes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Criar Cartao",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"limiteTotal\":10000,\n\t\"validade\":\"2020-11-29\",\n\t\"cvv\":222,\n\t\"limiteAtual\":20200,\n\t\"cliente\":{\"id\":1}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "18.228.2.146/cartoes",
+					"host": [
+						"18",
+						"228",
+						"2",
+						"146"
+					],
+					"path": [
+						"cartoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarCartao",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "18.228.2.146/cartoes",
+					"host": [
+						"18",
+						"228",
+						"2",
+						"146"
+					],
+					"path": [
+						"cartoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarTodosCartoes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "18.228.2.146/cartoes",
+					"host": [
+						"18",
+						"228",
+						"2",
+						"146"
+					],
+					"path": [
+						"cartoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AtualizarCartao",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\"cvv\":144\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "18.228.2.146/cartoes/1",
+					"host": [
+						"18",
+						"228",
+						"2",
+						"146"
+					],
+					"path": [
+						"cartoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteCartao",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "18.228.2.146/cartoes/1",
+					"host": [
+						"18",
+						"228",
+						"2",
+						"146"
+					],
+					"path": [
+						"cartoes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
