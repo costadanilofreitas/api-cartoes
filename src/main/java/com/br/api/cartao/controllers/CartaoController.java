@@ -1,6 +1,5 @@
 package com.br.api.cartao.controllers;
 
-
 import com.br.api.cartao.models.Cartao;
 import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.services.CartaoService;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("cartao")
+@RequestMapping("cartoes")
 public class CartaoController {
     @Autowired
     private CartaoService cartaoService;
@@ -29,8 +28,7 @@ public class CartaoController {
             List<Integer> clienteID = new ArrayList<>();
             clienteID.add(cartao.getCliente().getId());
             Iterable<Cliente> clienteIterable = cartaoService.buscarTodosClientes(clienteID);
-            cartao.setCliente(  clienteIterable.iterator().next());  // Somente um cliente
-
+            cartao.setCliente(clienteIterable.iterator().next());  // Somente um cliente
             Cartao resultado = cartaoService.salvarCartao(cartao);
             return ResponseEntity.status(201).body(resultado);
         } catch (Exception ex) {

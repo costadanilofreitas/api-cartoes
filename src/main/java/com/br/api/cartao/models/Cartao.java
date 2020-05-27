@@ -41,15 +41,6 @@ public class Cartao {
     public Cartao() {
     }
 
-    public Cartao(long numeroCartao, double limiteTotal, Date validade, int cvv, double limiteAtual, Cliente cliente) {
-        this.numeroCartao = numeroCartao;
-        this.limiteTotal = limiteTotal;
-        this.validade = validade;
-        this.cvv = cvv;
-        this.limiteAtual = limiteAtual;
-        this.cliente = cliente;
-    }
-
     public long getNumeroCartao() {
         return numeroCartao;
     }
