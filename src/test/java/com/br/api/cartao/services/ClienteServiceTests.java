@@ -62,8 +62,7 @@ public class ClienteServiceTests {
     public void testarBuscarPorIdInexistente(){
         Mockito.when(clienteRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
         int id = 1;
-        Optional clienteOptional = clienteService.buscarPorId(id);
-        Assertions.assertFalse(clienteOptional.isPresent());
+        Assertions.assertThrows(ObjectNotFoundException.class,() ->{clienteService.buscarPorId(id);});
     }
 
     @Test

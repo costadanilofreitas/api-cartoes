@@ -1,5 +1,6 @@
 package com.br.api.cartao.services;
 
+import com.br.api.cartao.models.Cliente;
 import com.br.api.cartao.models.Lancamento;
 import com.br.api.cartao.repositories.LancamentoRepository;
 import org.hibernate.ObjectNotFoundException;
@@ -16,7 +17,10 @@ public class LancamentoService {
 
     public Optional<Lancamento> buscarPorId(int id){
         Optional<Lancamento> lancamentoOptional = lancamentoRepository.findById(id);
-        return lancamentoOptional;
+        if(lancamentoOptional.isPresent()){
+            return lancamentoOptional;
+        }
+        throw new ObjectNotFoundException(Cliente.class, "O lancamento não foi encontrado!");
     }
 
     public Lancamento criarLancamento(Lancamento lancamento){
