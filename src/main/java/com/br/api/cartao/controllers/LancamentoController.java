@@ -41,12 +41,8 @@ public class LancamentoController {
 
     @PostMapping
     public ResponseEntity<Lancamento> criarLancamento(@RequestBody @Valid Lancamento lancamento){
-        try {
             Lancamento lancamentoObjeto = lancamentoService.criarLancamento(lancamento);
             return ResponseEntity.status(201).body(lancamentoObjeto);
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
-        }
     }
 
     @PutMapping("/{id}")
